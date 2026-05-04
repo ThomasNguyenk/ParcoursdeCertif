@@ -37,7 +37,8 @@ const certifications = [
         title: "Introduction à la Cybersécurité",
         duration: "~6 heures à notre rythme",
         logo: "https://sti.eduscol.education.fr/system/files/images/ressources/pedagogiques/16235/16235-introduction-to-cybersecurity-16.png",
-        bg: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070",
+        // MISE À JOUR AVEC TON NOUVEAU FOND
+        bg: "https://img.freepik.com/vecteurs-premium/bouclier-garde-concept-cybersecurite-bouclier-low-poly-brillant-fond-bleu-fonce-conception-filaire-low-poly-illustration-vectorielle-futuriste-abstraite_468958-466.jpg",
         link: "https://drive.google.com/file/d/15cCNrYsFQhADhy0a6LxHx7r9ZJwQbkbi/view",
         pros: ["Maîtrise triade CIA", "Identification menaces", "Socle débutant solide"],
         cons: ["Pas de labs pratiques", "Insuffisant seul", "Théorique"]
