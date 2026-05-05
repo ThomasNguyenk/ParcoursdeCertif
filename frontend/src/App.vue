@@ -158,7 +158,7 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
                 <i class="fas fa-award"></i> <span>SYNTHÈSE DU PARCOURS</span>
               </div>
               <p class="bilan-quote">
-                "L'ensemble de ces certifications témoigne de ma polyvalence technique et de ma capacité à assimiler les standards professionnels actuels."
+                "Ces certifications traduisent une démarche volontaire : celle d'un développeur qui structure ses apprentissages, les ancre dans les standards reconnus du secteur et s'inscrit dans une progression continue face aux évolutions rapides de l'informatique."
               </p>
             </div>
 
