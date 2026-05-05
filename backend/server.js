@@ -49,12 +49,22 @@ const certifications = [
     {
         title: "HTML Essentials",
         duration: "~30 heures",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/1200px-HTML5_logo_and_wordmark.svg.png",
+        logo: "https://www.netacad.com/p/ff9e491c-49be-4734-803e-a79e6e83dab1/badges/badge-images/22b824de-26d0-4ee1-8c09-3116479fff57.png",
         bg: "https://images.unsplash.com/photo-1621839673705-6617adf9e890?q=80&w=2070",
         link: "https://drive.google.com/file/d/1C6_fMaG7IdDdgDYtHSwphRiFpZmOX8q3/view",
         pros: ["Sémantique Web moderne", "Accessibilité & SEO", "Certification Cisco"],
         cons: ["Pas de design (CSS)", "Web statique uniquement", "Niveau d'entrée"],
         examples: ["Structure sémantique HTML5", "Formulaires interactifs", "Intégration Vidéo/Audio"]
+    },
+    {
+        title: "Notions de base sur les réseaux",
+        duration: "~25 heures",
+        logo: "https://www.netacad.com/p/ff9e491c-49be-4734-803e-a79e6e83dab1/badges/badge-images/ec7b044a-3368-4bc3-8eaf-1872a41780b2.png",
+        bg: "https://47fce7eb07.cbaul-cdnwnd.com/97174143cf7b54885f12a9ca01d4b3d1/200000000-975e7975e9/servers-room-fond-d-ecran-16907_L.jpg?ph=47fce7eb07",
+        link: "https://drive.google.com/file/d/1Oq8Wf6L81jdFnLRd-Xs6CUdsHc2hS7GY/view",
+        pros: ["Fondamentaux architecture réseau", "Modèles OSI et TCP/IP", "Certification Cisco Networking Academy"],
+        cons: ["Concepts abstraits", "Introduction uniquement", "Peu de configuration réelle"],
+        examples: ["Adressage IP et sous-réseaux", "Protocoles de transport (TCP/UDP)", "Fonctionnement du modèle OSI"]
     }
 ];
 app.get('/api/certifications', (req, res) => {

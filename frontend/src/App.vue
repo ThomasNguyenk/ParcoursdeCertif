@@ -90,7 +90,7 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
           </div>
         </div>
 
-        <!-- 3. DÉTAILS (MODIFIÉ POUR INCLURE LES EXEMPLES) -->
+        <!-- 3. DÉTAILS (AVEC CARTES SÉPARÉES) -->
         <div v-else-if="activeCert" class="slide split-layout" :key="activeCert.title" :style="{ backgroundImage: `url(${activeCert.bg})` }">
           <div class="overlay"></div>
 
@@ -110,22 +110,24 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 
           <div class="panel panel-right">
             <div class="skills-stack">
-              <!-- AJOUT DES EXEMPLES (MODULES CLÉS) -->
-              <div class="skill-group examples" v-if="activeCert.examples">
+              <!-- CARTE 1 : MODULES -->
+              <div class="skill-group card-style examples" v-if="activeCert.examples">
                 <h3><i class="fas fa-lightbulb"></i> Modules clés & Travaux</h3>
                 <ul class="example-list">
                   <li v-for="ex in activeCert.examples" :key="ex">{{ ex }}</li>
                 </ul>
               </div>
 
-              <div class="skill-group pros">
+              <!-- CARTE 2 : POINTS FORTS -->
+              <div class="skill-group card-style pros">
                 <h3><i class="fas fa-check-double"></i> Points Forts</h3>
                 <ul>
                   <li v-for="p in activeCert.pros" :key="p">{{ p }}</li>
                 </ul>
               </div>
 
-              <div class="skill-group cons">
+              <!-- CARTE 3 : PERIMETRE -->
+              <div class="skill-group card-style cons">
                 <h3><i class="fas fa-layer-group"></i> Périmètre</h3>
                 <ul>
                   <li v-for="n in activeCert.cons" :key="n">{{ n }}</li>
@@ -243,31 +245,65 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 .panel { position: relative; z-index: 5; flex: 1; }
 .glass-card {
   background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px); padding: 50px; border-radius: 30px; max-width: 500px;
+  backdrop-filter: blur(20px); padding: 50px; border-radius: 30px; max-width: 450px;
 }
 .logo-holder { background: white; padding: 15px; border-radius: 15px; display: inline-block; margin-bottom: 25px; height: 60px; }
 .logo-holder img { height: 100%; object-fit: contain; }
-.display-title { font-size: 2.8rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
+.display-title { font-size: 2.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
 .meta-info { display: flex; gap: 15px; margin-bottom: 35px; }
 .badge { background: rgba(255,255,255,0.07); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; }
 .badge.success { border: 1px solid #10b981; color: #10b981; }
 .cta-link { color: #0ea5e9; text-decoration: none; font-weight: 600; font-size: 1.1rem; border-bottom: 1px solid transparent; transition: 0.3s; }
 .cta-link:hover { border-bottom-color: #0ea5e9; padding-bottom: 5px; }
 
-.skills-stack { padding-left: 10%; }
-.skill-group { margin-bottom: 30px; }
-.skill-group h3 { font-size: 0.9rem; color: #0ea5e9; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
-.skill-group ul { list-style: none; padding: 0; }
-.skill-group li {
-  font-size: 1rem; margin-bottom: 8px; padding-left: 25px; position: relative; font-weight: 400; color: #cbd5e1;
+/* --- STYLE DES CARTES (COLONNE DROITE) --- */
+.skills-stack {
+  padding-left: 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
-.skill-group li::before { content: "→"; position: absolute; left: 0; color: #0ea5e9; opacity: 0.7; }
 
-/* STYLE SPÉCIFIQUE EXEMPLES */
-.example-list li { color: #f8fafc !important; font-weight: 600 !important; }
-.example-list li::before { content: "•" !important; color: #38bdf8 !important; }
+.card-style {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 20px 25px;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
 
-/* BILAN */
+.card-style:hover {
+  transform: translateX(10px);
+  border-color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.05);
+}
+
+.card-style h3 {
+  font-size: 0.85rem;
+  color: #0ea5e9;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-style ul { list-style: none; padding: 0; margin: 0; }
+.card-style li {
+  font-size: 0.95rem; margin-bottom: 8px; padding-left: 25px; position: relative; color: #cbd5e1;
+}
+
+/* Puces personnalisées par case */
+.card-style li::before { position: absolute; left: 0; }
+.examples li::before { content: "•"; color: #38bdf8; font-weight: bold; }
+.pros li::before { content: "✓"; color: #10b981; }
+.cons li::before { content: "→"; color: #94a3b8; opacity: 0.7; }
+
+.examples li { color: #f8fafc; font-weight: 600; }
+
+/* BILAN & ROADMAP */
 .bilan-container { max-width: 1000px !important; }
 .bilan-badge {
   display: inline-flex; align-items: center; gap: 10px; background: rgba(14, 165, 233, 0.1);
@@ -275,35 +311,27 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
   color: #0ea5e9; font-weight: 600; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 30px;
 }
 .bilan-quote { font-size: 2rem; font-weight: 200; font-style: italic; line-height: 1.4; margin-bottom: 60px; }
-.roadmap-title { display: flex; align-items: center; gap: 20px; margin-bottom: 40px; }
-.roadmap-title .line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); }
-.roadmap-title h3 { font-size: 0.9rem; letter-spacing: 5px; opacity: 0.6; }
 .roadmap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
 .roadmap-card {
   background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
   padding: 30px; border-radius: 20px; text-align: left; transition: 0.3s;
 }
-.roadmap-card:hover { border-color: #0ea5e9; transform: translateY(-5px); background: rgba(255,255,255,0.04); }
 .r-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 20px; }
 .r-ia { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
 .r-data { background: rgba(14, 165, 233, 0.1); color: #0ea5e9; }
 .r-infra { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-.roadmap-card h4 { margin-bottom: 15px; font-size: 1.1rem; }
-.roadmap-card ul { list-style: none; padding: 0; font-size: 0.9rem; color: #94a3b8; }
-.roadmap-card li { margin-bottom: 8px; }
 
 /* TRANSITIONS */
-.page-flip-enter-active,
-.page-flip-leave-active { transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-.page-flip-enter-from { opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(10px); }
-.page-flip-leave-to { opacity: 0; transform: translateY(-30px) scale(1.02); filter: blur(10px); }
+.page-flip-enter-active, .page-flip-leave-active { transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.page-flip-enter-from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+.page-flip-leave-to { opacity: 0; transform: translateY(-30px); filter: blur(10px); }
 
 /* LOADER */
 .loader-overlay { height: 100vh; display: flex; align-items: center; justify-content: center; background: #020617; }
 .loader { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #0ea5e9; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
-/* GRID GALERIE */
+/* GALERIE */
 .cert-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
 .grid-item { background: rgba(255,255,255,0.03); padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
 .item-icon-box { background: white; padding: 10px; border-radius: 10px; height: 40px; display: inline-block; margin-bottom: 15px; }
