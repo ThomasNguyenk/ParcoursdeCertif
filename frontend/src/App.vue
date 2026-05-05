@@ -150,7 +150,7 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
         </div>
 
         <!-- 4. BILAN -->
-        <div v-else class="slide central" key="final" style="background-image: url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070');">
+        <div v-else class="slide central" key="final" style="background-image: url('https://www.itpedia.nl/wp-content/uploads/2024/05/Large-language-model-in-SC.jpg');">
           <div class="overlay"></div>
           <div class="content bilan-container">
             <div class="bilan-header">
