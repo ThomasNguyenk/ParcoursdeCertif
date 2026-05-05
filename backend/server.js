@@ -50,6 +50,15 @@ const certifications = [
         link: "https://drive.google.com/file/d/1C6_fMaG7IdDdgDYtHSwphRiFpZmOX8q3/view",
         pros: ["Sémantique Web moderne", "Accessibilité & SEO", "Certification Cisco"],
         cons: ["Pas de design (CSS)", "Web statique uniquement", "Niveau d'entrée"]
+    },
+    {
+        title: "Notions de base sur les réseaux",
+        duration: "~25 heures",
+        logo: "https://www.netacad.com/p/ff9e491c-49be-4734-803e-a79e6e83dab1/badges/badge-images/d2864603-5188-422c-a0e1-4541572d427d.png",
+        bg: "https://images.unsplash.com/photo-1558494949-ef010cbdcc51?q=80&w=2070",
+        link: "https://drive.google.com/file/d/1Oq8Wf6L81jdFnLRd-Xs6CUdsHc2hS7GY/view",
+        pros: ["Fondamentaux architecture réseau", "Modèles OSI et TCP/IP", "Certification Cisco Networking Academy"],
+        cons: ["Concepts abstraits", "Introduction uniquement", "Peu de configuration réelle"]
     }
 ];
 
