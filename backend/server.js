@@ -9,7 +9,7 @@ const certifications = [
     {
         title: "MOOC ANSSI",
         duration: "~15 heures",
-        logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9R6U2dM1FF9pasgH2RURmCsnV_7JcGPgiktOg&s",
+        logo: "https://lesbases.anct.gouv.fr/images/ca180d93-c4dc-47ae-82c1-26936c39b83d.webp?width=864",
         bg: "https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=2070",
         link: "https://drive.google.com/file/d/1EWXzDYll9I6LRG2Iu2EtdAn17pDiGV87/view",
         pros: ["Contenu officiel certifié État", "Couverture cyber complète", "Forte valeur CV"],

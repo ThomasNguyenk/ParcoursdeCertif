@@ -1,16 +1,28 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 
 const current = ref(0)
 const certifications = ref([])
 const loading = ref(true)
 
+// Navigation
+const next = () => { if (current.value < totalSlides.value - 1) current.value++ }
+const prev = () => { if (current.value > 0) current.value-- }
+
+// Gestion des flèches du clavier
+const handleKeydown = (e) => {
+  if (e.key === 'ArrowRight') next()
+  if (e.key === 'ArrowLeft') prev()
+}
+
 onMounted(async () => {
+  // Ajout de l'écouteur clavier
+  window.addEventListener('keydown', handleKeydown)
+
   try {
     const response = await fetch('http://localhost:3000/api/certifications')
     const dataBackend = await response.json()
 
-    // Ajout manuel de la certification Réseau avec ses exemples
     const certifReseau = {
       title: "Notions de base sur les réseaux",
       duration: "~25 heures",
@@ -30,6 +42,11 @@ onMounted(async () => {
   }
 })
 
+// Très important : retirer l'écouteur quand on quitte la page pour éviter les fuites de mémoire
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
+})
+
 const totalSlides = computed(() => certifications.value.length + 3)
 const activeCert = computed(() => {
   if (current.value >= 2 && current.value < certifications.value.length + 2) {
@@ -38,8 +55,6 @@ const activeCert = computed(() => {
   return null
 })
 
-const next = () => { if (current.value < totalSlides.value - 1) current.value++ }
-const prev = () => { if (current.value > 0) current.value-- }
 const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/52/52349.png" }
 </script>
 
@@ -51,13 +66,13 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 
     <template v-else>
       <nav class="nav-ui">
-        <button class="nav-btn" @click="prev" :disabled="current === 0">
+        <button class="nav-btn" @click="prev" :disabled="current === 0" title="Flèche gauche">
           <i class="fas fa-chevron-left"></i>
         </button>
         <div class="nav-dots">
           <div v-for="n in totalSlides" :key="n" class="dot" :class="{ active: current === n-1 }"></div>
         </div>
-        <button class="nav-btn" @click="next" :disabled="current === totalSlides - 1">
+        <button class="nav-btn" @click="next" :disabled="current === totalSlides - 1" title="Flèche droite">
           <i class="fas fa-chevron-right"></i>
         </button>
       </nav>
@@ -67,7 +82,7 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
         <div v-if="current === 0" class="slide central" key="home" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072');">
           <div class="overlay"></div>
           <div class="content hero-content">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXeBFtgSzK7xszW_B57chbeyb2qOId3qNUXA&s" class="hero-logo-img">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:D9GcRXeBFtgSzK7xszW_B57chbeyb2qOId3qNUXA&s" class="hero-logo-img">
             <h1 class="main-title">Certifications</h1>
             <div class="status-line">
               <span class="pulse"></span>
@@ -90,7 +105,7 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
           </div>
         </div>
 
-        <!-- 3. DÉTAILS (AVEC CARTES SÉPARÉES) -->
+        <!-- 3. DÉTAILS -->
         <div v-else-if="activeCert" class="slide split-layout" :key="activeCert.title" :style="{ backgroundImage: `url(${activeCert.bg})` }">
           <div class="overlay"></div>
 
@@ -110,7 +125,6 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 
           <div class="panel panel-right">
             <div class="skills-stack">
-              <!-- CARTE 1 : MODULES -->
               <div class="skill-group card-style examples" v-if="activeCert.examples">
                 <h3><i class="fas fa-lightbulb"></i> Modules clés & Travaux</h3>
                 <ul class="example-list">
@@ -118,7 +132,6 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
                 </ul>
               </div>
 
-              <!-- CARTE 2 : POINTS FORTS -->
               <div class="skill-group card-style pros">
                 <h3><i class="fas fa-check-double"></i> Points Forts</h3>
                 <ul>
@@ -126,7 +139,6 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
                 </ul>
               </div>
 
-              <!-- CARTE 3 : PERIMETRE -->
               <div class="skill-group card-style cons">
                 <h3><i class="fas fa-layer-group"></i> Périmètre</h3>
                 <ul>
@@ -256,14 +268,13 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 .cta-link { color: #0ea5e9; text-decoration: none; font-weight: 600; font-size: 1.1rem; border-bottom: 1px solid transparent; transition: 0.3s; }
 .cta-link:hover { border-bottom-color: #0ea5e9; padding-bottom: 5px; }
 
-/* --- STYLE DES CARTES (COLONNE DROITE) --- */
+/* CARTES DROITE */
 .skills-stack {
   padding-left: 10%;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
-
 .card-style {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -272,38 +283,25 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
   border-radius: 15px;
   transition: all 0.3s ease;
 }
-
 .card-style:hover {
   transform: translateX(10px);
   border-color: #0ea5e9;
   background: rgba(14, 165, 233, 0.05);
 }
-
 .card-style h3 {
-  font-size: 0.85rem;
-  color: #0ea5e9;
-  margin-bottom: 15px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  font-size: 0.85rem; color: #0ea5e9; margin-bottom: 15px;
+  text-transform: uppercase; letter-spacing: 2px;
+  display: flex; align-items: center; gap: 10px;
 }
-
 .card-style ul { list-style: none; padding: 0; margin: 0; }
-.card-style li {
-  font-size: 0.95rem; margin-bottom: 8px; padding-left: 25px; position: relative; color: #cbd5e1;
-}
-
-/* Puces personnalisées par case */
+.card-style li { font-size: 0.95rem; margin-bottom: 8px; padding-left: 25px; position: relative; color: #cbd5e1; }
 .card-style li::before { position: absolute; left: 0; }
 .examples li::before { content: "•"; color: #38bdf8; font-weight: bold; }
 .pros li::before { content: "✓"; color: #10b981; }
 .cons li::before { content: "→"; color: #94a3b8; opacity: 0.7; }
-
 .examples li { color: #f8fafc; font-weight: 600; }
 
-/* BILAN & ROADMAP */
+/* BILAN */
 .bilan-container { max-width: 1000px !important; }
 .bilan-badge {
   display: inline-flex; align-items: center; gap: 10px; background: rgba(14, 165, 233, 0.1);
