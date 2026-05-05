@@ -30,7 +30,7 @@ const certifications = [
         title: "JavaScript Essentials 1",
         duration: "~40 heures",
         logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvwyns96bodKrr8OGzXJ23DtXi3Bl2P7wdrw&s",
-        bg: "https://www.netacad.com/p/ff9e491c-49be-4734-803e-a79e6e83dab1/badges/badge-images/ea417db0-3d66-4eba-9f93-45b063e146f7.png",
+        bg: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800&q=80&fit=crop&h=400",
         link: "https://drive.google.com/file/d/1rfJypqJTsyzP9y7hG-iHmTZ7Pzo8JUtd/view",
         pros: ["Logique algorithmique rigoureuse", "Base Web indispensable", "Certification Cisco reconnue"],
         cons: ["Technique exigeante", "Pas de frameworks modernes", "Focus code pur"],

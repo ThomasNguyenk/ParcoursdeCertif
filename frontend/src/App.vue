@@ -91,20 +91,25 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
           </div>
         </div>
 
-        <!-- 2. GALERIE -->
-        <div v-else-if="current === 1" class="slide central" key="gallery" style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070');">
-          <div class="overlay"></div>
-          <div class="content">
-            <h2 class="section-label">PARCOURS D'ACCRÉDITATION</h2>
-            <div class="cert-grid">
-              <div v-for="c in certifications" class="grid-item" :key="c.title">
-                <div class="item-icon-box"><img :src="c.logo" @error="handleImageError"></div>
-                <span class="item-name">{{ c.title }}</span>
+        <div v-else-if="current === 1" class="slide central" key="gallery"
+             style="background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2070'); background-size: cover; background-position: center;">
+
+          <div class="overlay"
+               style="background: rgba(0,0,0,0.75); position:absolute; width:100%; height:100%;">
+          </div>
+
+          <div class="content" style="position:relative; z-index:2; padding:40px; text-align:center;">
+            <h2 style="color:white;">PARCOURS D'ACCRÉDITATION</h2>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px;">
+              <div v-for="c in certifications" :key="c.title"
+                   style="background:rgba(255,255,255,0.05); padding:20px; border-radius:15px;">
+                <img :src="c.logo" style="height:50px;">
+                <p style="color:#e0e0e0;">{{ c.title }}</p>
               </div>
             </div>
           </div>
         </div>
-
         <!-- 3. DÉTAILS -->
         <div v-else-if="activeCert" class="slide split-layout" :key="activeCert.title" :style="{ backgroundImage: `url(${activeCert.bg})` }">
           <div class="overlay"></div>
