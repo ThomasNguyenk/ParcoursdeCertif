@@ -27,14 +27,14 @@ onMounted(async () => {
       title: "Notions de base sur les réseaux",
       duration: "~25 heures",
       logo: "https://www.netacad.com/p/ff9e491c-49be-4734-803e-a79e6e83dab1/badges/badge-images/ec7b044a-3368-4bc3-8eaf-1872a41780b2.png",
-      bg: "https://47fce7eb07.cbaul-cdnwnd.com/97174143cf7b54885f12a9ca01d4b3d1/200000000-975e7975e9/servers-room-fond-d-ecran-16907_L.jpg?ph=47fce7eb07",
+      bg: "https://png.pngtree.com/thumb_back/fh260/background/20260407/pngtree-midnight-hacker-in-a-dark-room-with-laptop-and-cyber-network-image_21683630.webp",
       link: "https://drive.google.com/file/d/1Oq8Wf6L81jdFnLRd-Xs6CUdsHc2hS7GY/view",
       pros: ["Fondamentaux architecture réseau", "Modèles OSI et TCP/IP", "Certification Cisco Networking Academy"],
       cons: ["Concepts abstraits", "Introduction uniquement", "Peu de configuration réelle"],
       examples: ["Adressage IP et sous-réseaux", "Protocoles de transport (TCP/UDP)", "Fonctionnement du modèle OSI"]
     }
 
-    certifications.value = [...dataBackend, certifReseau]
+    certifications.value = [...dataBackend]
   } catch (error) {
     console.error("Erreur :", error)
   } finally {
@@ -92,14 +92,14 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
         </div>
 
         <div v-else-if="current === 1" class="slide central" key="gallery"
-             style="background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2070'); background-size: cover; background-position: center;">
+             style="background-image: url('https://www.unite.ai/wp-content/uploads/2020/12/Cybersecurity-Certifications.webp'); background-size: cover; background-position: center;">
 
           <div class="overlay"
                style="background: rgba(0,0,0,0.75); position:absolute; width:100%; height:100%;">
           </div>
 
           <div class="content" style="position:relative; z-index:2; padding:40px; text-align:center;">
-            <h2 style="color:white;">PARCOURS D'ACCRÉDITATION</h2>
+            <h2 style="color:white;">CERTIFICATIONS</h2>
 
             <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px;">
               <div v-for="c in certifications" :key="c.title"
