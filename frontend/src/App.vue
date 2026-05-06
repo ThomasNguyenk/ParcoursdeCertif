@@ -27,7 +27,7 @@ onMounted(async () => {
       title: "Notions de base sur les réseaux",
       duration: "~25 heures",
       logo: "https://www.netacad.com/p/ff9e491c-49be-4734-803e-a79e6e83dab1/badges/badge-images/ec7b044a-3368-4bc3-8eaf-1872a41780b2.png",
-      bg: "https://png.pngtree.com/thumb_back/fh260/background/20260407/pngtree-midnight-hacker-in-a-dark-room-with-laptop-and-cyber-network-image_21683630.webp",
+      bg: "https://images.stockcake.com/public/5/f/1/5f11e699-3379-4bca-9841-fe9fe3e747fe_large/vibrant-network-cables-stockcake.jpg",
       link: "https://drive.google.com/file/d/1Oq8Wf6L81jdFnLRd-Xs6CUdsHc2hS7GY/view",
       pros: ["Fondamentaux architecture réseau", "Modèles OSI et TCP/IP", "Certification Cisco Networking Academy"],
       cons: ["Concepts abstraits", "Introduction uniquement", "Peu de configuration réelle"],

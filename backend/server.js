@@ -10,7 +10,7 @@ const certifications = [
         title: "MOOC ANSSI",
         duration: "~15 heures",
         logo: "https://lesbases.anct.gouv.fr/images/ca180d93-c4dc-47ae-82c1-26936c39b83d.webp?width=864",
-        bg: "https://blog.tixeo.com/wp-content/uploads/2023/12/certification-secu-1080x675-1-1080x675.webp",
+        bg: "https://codra.net/wp-content/uploads/2019/11/anssi_960x575-1.png",
         link: "https://drive.google.com/file/d/1EWXzDYll9I6LRG2Iu2EtdAn17pDiGV87/view",
         pros: ["Contenu officiel certifié État", "Couverture cyber complète", "Forte valeur CV"],
         cons: ["Format très théorique", "Modules juridiques denses", "Sensibilisation globale"],
@@ -20,7 +20,7 @@ const certifications = [
         title: "Certification Pix - Création Numérique",
         duration: "Évaluation continue - 2 à 3 ans",
         logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Pix_logo.svg/3840px-Pix_logo.svg.png",
-        bg: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=2000",
+        bg: "https://korben.info/cdn-cgi/image/width=1200,fit=scale-down,quality=90,f=avif/cours-certifications-gratuits-technologie-developpement-marketing-cybersecurite/cours-certifications-gratuits-technologie-developpement-marketing-cybersecurite-2.webp",
         link: "https://drive.google.com/file/d/1psa9wg_94pEFcyfA7N20F5CwBRNaM3j-/view",
         pros: ["Inclusion numérique", "Esprit de collaboration", "Polyvalence créative"],
         cons: ["Moins spécialisé en design pro", "Dépendance aux plateformes", "Matériel variable"],
@@ -40,7 +40,7 @@ const certifications = [
         title: "Introduction à la Cybersécurité",
         duration: "~6 heures",
         logo: "https://sti.eduscol.education.fr/system/files/images/ressources/pedagogiques/16235/16235-introduction-to-cybersecurity-16.png",
-        bg: "https://mic.mediacdn.vn/639352410187198464/2024/1/9/cyber-security-la-gi-01-1200x750-1704763559090-17047635593061543404359.jpg",
+        bg: "https://ingetis.com/wp-content/uploads/2024/10/formation-cybersecurite-les-competences-indispensables.jpg",
         link: "https://drive.google.com/file/d/15cCNrYsFQhADhy0a6LxHx7r9ZJwQbkbi/view",
         pros: ["Maîtrise triade CIA", "Identification menaces", "Socle débutant solide"],
         cons: ["Pas de labs pratiques", "Insuffisant seul", "Théorique"],
@@ -56,7 +56,16 @@ const certifications = [
         cons: ["Pas de design (CSS)", "Web statique uniquement", "Niveau d'entrée"],
         examples: ["Structure sémantique HTML5", "Formulaires interactifs", "Intégration Vidéo/Audio"]
     },
-
+    {
+        title: "Notions de base sur les réseaux",
+        duration: "~25 heures",
+        logo: "https://www.netacad.com/p/ff9e491c-49be-4734-803e-a79e6e83dab1/badges/badge-images/ec7b044a-3368-4bc3-8eaf-1872a41780b2.png",
+        bg: "https://images.stockcake.com/public/5/f/1/5f11e699-3379-4bca-9841-fe9fe3e747fe_large/vibrant-network-cables-stockcake.jpg",
+        link: "https://drive.google.com/file/d/1Oq8Wf6L81jdFnLRd-Xs6CUdsHc2hS7GY/view",
+        pros: ["Fondamentaux architecture réseau", "Modèles OSI et TCP/IP", "Certification Cisco Networking Academy"],
+        cons: ["Concepts abstraits", "Introduction uniquement", "Peu de configuration réelle"],
+        examples: ["Adressage IP et sous-réseaux", "Protocoles de transport (TCP/UDP)", "Fonctionnement du modèle OSI"]
+    }
 ];
 app.get('/api/certifications', (req, res) => {
     res.json(certifications);
