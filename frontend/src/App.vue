@@ -79,7 +79,7 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 
       <transition name="page-flip" mode="out-in">
         <!-- 1. ACCUEIL -->
-        <div v-if="current === 0" class="slide central" key="home" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072');">
+        <div v-if="current === 0" class="slide central" key="home" style="background-image: url('https://i.pinimg.com/736x/39/e4/83/39e483bfb3807afe00823e63a4519e28.jpg');">
           <div class="overlay"></div>
           <div class="content hero-content">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:D9GcRXeBFtgSzK7xszW_B57chbeyb2qOId3qNUXA&s" class="hero-logo-img">
@@ -92,7 +92,7 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
         </div>
 
         <div v-else-if="current === 1" class="slide central" key="gallery"
-             style="background-image: url('https://www.unite.ai/wp-content/uploads/2020/12/Cybersecurity-Certifications.webp'); background-size: cover; background-position: center;">
+             style="background-image: url('https://img.freepik.com/photos-gratuite/arriere-plan-du-pirate-matrice_23-2150082005.jpg?semt=ais_hybrid&w=740&q=80'); background-size: cover; background-position: center;">
 
           <div class="overlay"
                style="background: rgba(0,0,0,0.75); position:absolute; width:100%; height:100%;">
