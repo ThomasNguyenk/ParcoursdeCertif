@@ -17,14 +17,20 @@ const certifications = [
         examples: ["Sécurisation du poste de travail", "Hygiène informatique en entreprise", "Protection des données nomades"]
     },
     {
-        title: "Certification Pix - Création Numérique",
-        duration: "Évaluation continue - 2 à 3 ans",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Pix_logo.svg/3840px-Pix_logo.svg.png",
+        title: "Certification PIX",
+        duration: "2 à 3 ans",
+        logo: "https://couserans.mon-ent-occitanie.fr/lectureFichiergw.do?ID_FICHIER=1451887170746",
         bg: "https://lasalle-valenciennes.com/wp-content/uploads/2024/06/95622b616a0f315d192ab0eb7f61e861-l.jpg",
         link: "https://drive.google.com/file/d/1psa9wg_94pEFcyfA7N20F5CwBRNaM3j-/view",
-        pros: ["Inclusion numérique", "Esprit de collaboration", "Polyvalence créative"],
-        cons: ["Moins spécialisé en design pro", "Dépendance aux plateformes", "Matériel variable"],
-        examples: ["Édition de contenus multimédia", "Partage de ressources en ligne", "Droit d'auteur et licences Creative Commons"]
+        pros: ["Standard national officiel", "Test adaptatif personnalisé", "Valorisation sur CV"],
+        cons: ["Demande de la régularité", "Niveaux supérieurs exigeants"],
+        examples: [
+            "Informations et données : RECHERCHE",
+            "Communication et collaboration : PARTAGE",
+            "Création de contenu : ÉDITION",
+            "Protection et sécurité : SÉCURITÉ",
+            "Environnement numérique : RÉSOLUTION"
+        ]
     },
     {
         title: "JavaScript Essentials 1",
@@ -34,7 +40,7 @@ const certifications = [
         link: "https://drive.google.com/file/d/1rfJypqJTsyzP9y7hG-iHmTZ7Pzo8JUtd/view",
         pros: ["Logique algorithmique rigoureuse", "Base Web indispensable", "Certification Cisco reconnue"],
         cons: ["Technique exigeante", "Pas de frameworks modernes", "Focus code pur"],
-        examples: ["Manipulation du DOM", "Boucles et conditions", "Programmation orientée objet"]
+        examples: ["Manipulation du DOM (Document Object Model)", "Boucles (If-Else/While) et conditions (structure de contrôle)", "Programmation orientée objet (Classe/Objet)"]
     },
     {
         title: "Introduction à la Cybersécurité",
@@ -44,7 +50,7 @@ const certifications = [
         link: "https://drive.google.com/file/d/15cCNrYsFQhADhy0a6LxHx7r9ZJwQbkbi/view",
         pros: ["Maîtrise triade CIA", "Identification menaces", "Socle débutant solide"],
         cons: ["Pas de labs pratiques", "Insuffisant seul", "Théorique"],
-        examples: ["Analyse de malwares", "Ingénierie sociale", "Concepts de VPN et Pare-feu"]
+        examples: ["Cryptographie et Hachage", "Protocoles réseau sécurisés", "Authentification MFA et 2FA", "Hygiène numérique et RGPD"]
     },
     {
         title: "HTML Essentials",
