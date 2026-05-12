@@ -5,35 +5,20 @@ const current = ref(0)
 const certifications = ref([])
 const loading = ref(true)
 
-// Navigation
 const next = () => { if (current.value < totalSlides.value - 1) current.value++ }
 const prev = () => { if (current.value > 0) current.value-- }
 
-// Gestion des flèches du clavier
 const handleKeydown = (e) => {
   if (e.key === 'ArrowRight') next()
   if (e.key === 'ArrowLeft') prev()
 }
 
 onMounted(async () => {
-  // Ajout de l'écouteur clavier
   window.addEventListener('keydown', handleKeydown)
 
   try {
     const response = await fetch('http://localhost:3000/api/certifications')
     const dataBackend = await response.json()
-
-    const certifReseau = {
-      title: "Notions de base sur les réseaux",
-      duration: "~25 heures",
-      logo: "https://www.netacad.com/p/ff9e491c-49be-4734-803e-a79e6e83dab1/badges/badge-images/ec7b044a-3368-4bc3-8eaf-1872a41780b2.png",
-      bg: "https://thumbs.dreamstime.com/b/r%C3%A9seau-informatique-global-32900669.jpg",
-      link: "https://drive.google.com/file/d/1Oq8Wf6L81jdFnLRd-Xs6CUdsHc2hS7GY/view",
-      pros: ["Fondamentaux architecture réseau", "Modèles OSI et TCP/IP", "Certification Cisco Networking Academy"],
-      cons: ["Concepts abstraits", "Introduction uniquement", "Peu de configuration réelle"],
-      examples: ["Adressage IP et sous-réseaux", "Protocoles de transport (TCP/UDP)", "Fonctionnement du modèle OSI"]
-    }
-
     certifications.value = [...dataBackend]
   } catch (error) {
     console.error("Erreur :", error)
@@ -42,7 +27,6 @@ onMounted(async () => {
   }
 })
 
-// Très important : retirer l'écouteur quand on quitte la page pour éviter les fuites de mémoire
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
 })
@@ -78,8 +62,10 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
       </nav>
 
       <transition name="page-flip" mode="out-in">
+
         <!-- 1. ACCUEIL -->
-        <div v-if="current === 0" class="slide central" key="home" style="background-image: url('https://i.pinimg.com/736x/39/e4/83/39e483bfb3807afe00823e63a4519e28.jpg');">
+        <div v-if="current === 0" class="slide central" key="home"
+             style="background-image: url('https://i.pinimg.com/736x/39/e4/83/39e483bfb3807afe00823e63a4519e28.jpg');">
           <div class="overlay"></div>
           <div class="content hero-content">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:D9GcRXeBFtgSzK7xszW_B57chbeyb2qOId3qNUXA&s" class="hero-logo-img">
@@ -91,32 +77,45 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
           </div>
         </div>
 
+        <!-- 2. GALERIE -->
         <div v-else-if="current === 1" class="slide central" key="gallery"
              style="background-image: url('https://img.freepik.com/photos-gratuite/arriere-plan-du-pirate-matrice_23-2150082005.jpg?semt=ais_hybrid&w=740&q=80'); background-size: cover; background-position: center;">
 
-          <div class="overlay"
-               style="background: rgba(0,0,0,0.75); position:absolute; width:100%; height:100%;">
-          </div>
+          <div class="overlay"></div>
 
-          <div class="content" style="position:relative; z-index:2; padding:40px; text-align:center;">
-            <h2 style="color:white;">CERTIFICATIONS</h2>
+          <div class="content gallery-content">
+            <h2 class="gallery-title">CERTIFICATIONS</h2>
 
-            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px;">
-              <div v-for="c in certifications" :key="c.title"
-                   style="background:rgba(255,255,255,0.05); padding:20px; border-radius:15px;">
-                <img :src="c.logo" style="height:50px;">
-                <p style="color:#e0e0e0;">{{ c.title }}</p>
+            <div class="cert-futur-grid">
+              <div v-for="(c, index) in certifications" :key="c.title"
+                   class="cert-futur-card"
+                   :style="{ animationDelay: `${index * 0.08}s` }">
+
+                <div class="card-scan-line"></div>
+                <div class="card-corner-tl"></div>
+                <div class="card-corner-br"></div>
+
+                <div class="card-logo-box">
+                  <img :src="c.logo" @error="handleImageError" alt="">
+                </div>
+
+                <p class="card-name">{{ c.title }}</p>
               </div>
             </div>
           </div>
         </div>
+
         <!-- 3. DÉTAILS -->
-        <div v-else-if="activeCert" class="slide split-layout" :key="activeCert.title" :style="{ backgroundImage: `url(${activeCert.bg})` }">
+        <div v-else-if="activeCert" class="slide split-layout"
+             :key="activeCert.title"
+             :style="{ backgroundImage: `url(${activeCert.bg})` }">
           <div class="overlay"></div>
 
           <div class="panel panel-left">
             <div class="glass-card">
-              <div class="logo-holder"><img :src="activeCert.logo" @error="handleImageError"></div>
+              <div class="logo-holder">
+                <img :src="activeCert.logo" @error="handleImageError">
+              </div>
               <h2 class="display-title">{{ activeCert.title }}</h2>
               <div class="meta-info">
                 <span class="badge"><i class="far fa-clock"></i> {{ activeCert.duration }}</span>
@@ -155,7 +154,8 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
         </div>
 
         <!-- 4. BILAN -->
-        <div v-else class="slide central" key="final" style="background-image: url('https://www.itpedia.nl/wp-content/uploads/2024/05/Large-language-model-in-SC.jpg');">
+        <div v-else class="slide central" key="final"
+             style="background-image: url('https://www.itpedia.nl/wp-content/uploads/2024/05/Large-language-model-in-SC.jpg');">
           <div class="overlay"></div>
           <div class="content bilan-container">
             <div class="bilan-header">
@@ -203,6 +203,7 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
             </div>
           </div>
         </div>
+
       </transition>
     </template>
   </div>
@@ -211,7 +212,7 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600;800&display=swap');
 
-/* CONFIG GÉNÉRALE */
+/* ===== CONFIG GÉNÉRALE ===== */
 #app-container {
   background: #020617;
   color: #f8fafc;
@@ -237,11 +238,11 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 .central { align-items: center; justify-content: center; text-align: center; }
 .content { position: relative; z-index: 5; width: 90%; max-width: 1200px; }
 
-/* NAVIGATION */
+/* ===== NAVIGATION ===== */
 .nav-ui {
   position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
   z-index: 100; display: flex; align-items: center; gap: 30px;
-  background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(10px);
+  background: rgba(15,23,42,0.7); backdrop-filter: blur(10px);
   padding: 12px 25px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);
 }
 .nav-btn { background: none; border: none; color: #fff; cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
@@ -251,30 +252,112 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.2); border-radius: 50%; transition: 0.4s; }
 .dot.active { width: 24px; background: #0ea5e9; border-radius: 10px; }
 
-/* ACCUEIL */
+/* ===== ACCUEIL ===== */
 .hero-logo-img { height: 100px; margin-bottom: 20px; }
 .main-title { font-size: 5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 10px; }
 .status-line { display: flex; align-items: center; justify-content: center; gap: 15px; opacity: 0.7; }
 .pulse { width: 10px; height: 10px; background: #0ea5e9; border-radius: 50%; box-shadow: 0 0 10px #0ea5e9; }
 
-/* --- PANNEAU GAUCHE (Certification Card) --- */
+/* ===== GALERIE FUTURISTE ===== */
+.gallery-content { max-width: 1200px !important; }
+
+.gallery-title {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 40px;
+}
+
+.cert-futur-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.cert-futur-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(15,23,42,0.92), rgba(2,6,23,0.97));
+  border: 1px solid rgba(14,165,233,0.25);
+  backdrop-filter: blur(20px);
+  padding: 30px 25px;
+  overflow: hidden;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 88%, 93% 100%, 0% 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  animation: card-appear 0.5s ease both;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cert-futur-card:hover {
+  border-color: rgba(14,165,233,0.7);
+  transform: translateY(-5px);
+  box-shadow: 0 0 25px rgba(14,165,233,0.1), 0 20px 40px rgba(0,0,0,0.5);
+}
+
+@keyframes card-appear {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card-scan-line {
+  position: absolute;
+  top: -5%; left: 0;
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, #0ea5e9, transparent);
+  opacity: 0.3;
+  animation: card-scan 3s linear infinite;
+}
+
+@keyframes card-scan {
+  from { top: -5%; }
+  to   { top: 105%; }
+}
+
+.card-corner-tl, .card-corner-br {
+  position: absolute;
+  width: 10px; height: 10px;
+  opacity: 0.5;
+}
+.card-corner-tl { top: 8px; left: 8px; border-top: 2px solid #0ea5e9; border-left: 2px solid #0ea5e9; }
+.card-corner-br { bottom: 16px; right: 8px; border-bottom: 2px solid #0ea5e9; border-right: 2px solid #0ea5e9; }
+
+.card-logo-box {
+  background: white;
+  border: 1.5px solid #0ea5e9;
+  border-radius: 8px;
+  width: 54px; height: 54px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 12px rgba(14,165,233,0.2);
+  overflow: hidden;
+}
+.card-logo-box img { width: 80%; height: 80%; object-fit: contain; }
+
+.card-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ===== DÉTAILS (split layout) ===== */
 .split-layout { display: flex; align-items: center; padding: 0 8%; }
 .panel { position: relative; z-index: 5; flex: 1; }
 
 .glass-card {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(2, 6, 23, 0.95) 100%);
-  border: 1px solid rgba(14, 165, 233, 0.3);
+  background: linear-gradient(135deg, rgba(15,23,42,0.9) 0%, rgba(2,6,23,0.95) 100%);
+  border: 1px solid rgba(14,165,233,0.3);
   backdrop-filter: blur(25px);
   padding: 50px;
   max-width: 450px;
   position: relative;
   overflow: hidden;
-  /* Découpe futuriste */
   clip-path: polygon(0% 0%, 100% 0%, 100% 92%, 92% 100%, 0% 100%);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
 }
 
-/* Ligne de scan animée */
 .glass-card::after {
   content: "";
   position: absolute;
@@ -286,8 +369,8 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 }
 
 @keyframes scan-line {
-  0% { top: 0; }
-  100% { top: 100%; }
+  0%  { top: 0; }
+  100%{ top: 100%; }
 }
 
 .logo-holder {
@@ -298,7 +381,7 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
   display: inline-block;
   margin-bottom: 25px;
   height: 60px;
-  box-shadow: 0 0 15px rgba(14, 165, 233, 0.3);
+  box-shadow: 0 0 15px rgba(14,165,233,0.3);
 }
 .logo-holder img { height: 100%; object-fit: contain; }
 
@@ -306,13 +389,13 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 
 .meta-info { display: flex; gap: 15px; margin-bottom: 35px; }
 .badge {
-  background: rgba(14, 165, 233, 0.1);
+  background: rgba(14,165,233,0.1);
   padding: 6px 15px;
   border-left: 3px solid #0ea5e9;
   font-family: monospace;
   font-size: 0.8rem;
 }
-.badge.success { border-left-color: #10b981; color: #10b981; background: rgba(16, 185, 129, 0.1); }
+.badge.success { border-left-color: #10b981; color: #10b981; background: rgba(16,185,129,0.1); }
 
 .cta-link {
   color: #0ea5e9;
@@ -325,17 +408,12 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 }
 .cta-link:hover { text-shadow: 0 0 8px #0ea5e9; }
 
-/* --- CARTES DROITE (Modules & Travaux) --- */
-.skills-stack {
-  padding-left: 10%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
+/* ===== CARTES DROITE ===== */
+.skills-stack { padding-left: 10%; display: flex; flex-direction: column; gap: 20px; }
 
 .card-style {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%);
-  border: 1px solid rgba(14, 165, 233, 0.2);
+  background: linear-gradient(135deg, rgba(30,41,59,0.4) 0%, rgba(15,23,42,0.8) 100%);
+  border: 1px solid rgba(14,165,233,0.2);
   backdrop-filter: blur(15px);
   padding: 20px 25px;
   border-radius: 10px;
@@ -346,7 +424,7 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 .card-style:hover {
   transform: translateX(15px);
   border-color: #0ea5e9;
-  box-shadow: 0 0 20px rgba(14, 165, 233, 0.15);
+  box-shadow: 0 0 20px rgba(14,165,233,0.15);
 }
 
 .card-style h3 {
@@ -357,7 +435,7 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 
 .card-style h3::after {
   content: ""; flex: 1; height: 1px;
-  background: linear-gradient(90deg, rgba(14, 165, 233, 0.4), transparent);
+  background: linear-gradient(90deg, rgba(14,165,233,0.4), transparent);
 }
 
 .card-style ul { list-style: none; padding: 0; margin: 0; }
@@ -374,49 +452,18 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 .card-style li::before { position: absolute; left: 12px; font-family: monospace; font-weight: bold; }
 .examples li::before { content: "01"; color: #38bdf8; font-size: 0.7rem; top: 8px; }
 .pros li::before { content: ">>"; color: #10b981; }
-.constraints li::before { content: "!!"; color: #f43f5e; }
+.cons li::before { content: "!!"; color: #f43f5e; }
 
 .examples li { color: #f8fafc; border-left: 2px solid #0ea5e9; }
 .pros li { border-left: 2px solid #10b981; }
-.constraints li { border-left: 2px solid #f43f5e; }
+.cons li { border-left: 2px solid #f43f5e; }
 
-/* --- GALERIE (Certifications Grid) --- */
-.cert-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
-
-.grid-item {
-  background: rgba(15, 23, 42, 0.6);
-  padding: 25px;
-  border-radius: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: 0.3s;
-  position: relative;
-  overflow: hidden;
-}
-
-.grid-item:hover {
-  border-color: #0ea5e9;
-  transform: translateY(-5px);
-  background: rgba(14, 165, 233, 0.05);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-}
-
-.item-icon-box {
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  height: 45px;
-  display: inline-block;
-  margin-bottom: 15px;
-  border: 1px solid #0ea5e9;
-}
-.item-icon-box img { height: 100%; object-fit: contain; }
-.item-name { display: block; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px; color: #f8fafc; }
-
-/* BILAN */
+/* ===== BILAN ===== */
 .bilan-container { max-width: 1000px !important; }
 .bilan-badge {
-  display: inline-flex; align-items: center; gap: 10px; background: rgba(14, 165, 233, 0.1);
-  padding: 8px 20px; border-radius: 50px; border: 1px solid rgba(14, 165, 233, 0.3);
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(14,165,233,0.1);
+  padding: 8px 20px; border-radius: 50px; border: 1px solid rgba(14,165,233,0.3);
   color: #0ea5e9; font-weight: 600; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 30px;
 }
 .bilan-quote { font-size: 2rem; font-weight: 200; font-style: italic; line-height: 1.4; margin-bottom: 60px; }
@@ -426,12 +473,12 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
   padding: 30px; border-radius: 20px; text-align: left; transition: 0.3s;
 }
 .r-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 20px; }
-.r-ia { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
-.r-data { background: rgba(14, 165, 233, 0.1); color: #0ea5e9; }
-.r-infra { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.r-ia   { background: rgba(168,85,247,0.1); color: #a855f7; }
+.r-data { background: rgba(14,165,233,0.1); color: #0ea5e9; }
+.r-infra{ background: rgba(16,185,129,0.1); color: #10b981; }
 
-/* TRANSITIONS */
-.page-flip-enter-active, .page-flip-leave-active { transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+/* ===== TRANSITIONS ===== */
+.page-flip-enter-active, .page-flip-leave-active { transition: all 0.6s cubic-bezier(0.4,0,0.2,1); }
 .page-flip-enter-from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
-.page-flip-leave-to { opacity: 0; transform: translateY(-30px); filter: blur(10px); }
+.page-flip-leave-to  { opacity: 0; transform: translateY(-30px); filter: blur(10px); }
 </style>
