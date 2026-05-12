@@ -15,7 +15,6 @@ const handleKeydown = (e) => {
 
 onMounted(async () => {
   window.addEventListener('keydown', handleKeydown)
-
   try {
     const response = await fetch('http://localhost:3000/api/certifications')
     const dataBackend = await response.json()
@@ -80,25 +79,19 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
         <!-- 2. GALERIE -->
         <div v-else-if="current === 1" class="slide central" key="gallery"
              style="background-image: url('https://img.freepik.com/photos-gratuite/arriere-plan-du-pirate-matrice_23-2150082005.jpg?semt=ais_hybrid&w=740&q=80'); background-size: cover; background-position: center;">
-
           <div class="overlay"></div>
-
           <div class="content gallery-content">
             <h2 class="gallery-title">CERTIFICATIONS</h2>
-
             <div class="cert-futur-grid">
               <div v-for="(c, index) in certifications" :key="c.title"
                    class="cert-futur-card"
                    :style="{ animationDelay: `${index * 0.08}s` }">
-
                 <div class="card-scan-line"></div>
                 <div class="card-corner-tl"></div>
                 <div class="card-corner-br"></div>
-
                 <div class="card-logo-box">
                   <img :src="c.logo" @error="handleImageError" alt="">
                 </div>
-
                 <p class="card-name">{{ c.title }}</p>
               </div>
             </div>
@@ -131,18 +124,16 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
             <div class="skills-stack">
               <div class="skill-group card-style examples" v-if="activeCert.examples">
                 <h3><i class="fas fa-lightbulb"></i> Modules clés & Travaux</h3>
-                <ul class="example-list">
+                <ul>
                   <li v-for="ex in activeCert.examples" :key="ex">{{ ex }}</li>
                 </ul>
               </div>
-
               <div class="skill-group card-style pros">
                 <h3><i class="fas fa-check-double"></i> Points Forts</h3>
                 <ul>
                   <li v-for="p in activeCert.pros" :key="p">{{ p }}</li>
                 </ul>
               </div>
-
               <div class="skill-group card-style cons">
                 <h3><i class="fas fa-layer-group"></i> Périmètre</h3>
                 <ul>
@@ -175,28 +166,37 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
               </div>
 
               <div class="roadmap-grid">
-                <div class="roadmap-card">
+                <div class="roadmap-card roadmap-ia">
+                  <div class="card-scan-line"></div>
+                  <div class="card-corner-tl"></div>
+                  <div class="card-corner-br"></div>
                   <div class="r-icon r-ia"><i class="fas fa-brain"></i></div>
                   <h4>IA & Innovation</h4>
                   <ul>
-                    <li>• IA Générative (IBM)</li>
-                    <li>• Analyse de données</li>
+                    <li>IA Générative (IBM)</li>
+                    <li>Analyse de données</li>
                   </ul>
                 </div>
-                <div class="roadmap-card">
+                <div class="roadmap-card roadmap-data">
+                  <div class="card-scan-line"></div>
+                  <div class="card-corner-tl"></div>
+                  <div class="card-corner-br"></div>
                   <div class="r-icon r-data"><i class="fas fa-database"></i></div>
                   <h4>Data & Dev</h4>
                   <ul>
-                    <li>• Python Data Science</li>
-                    <li>• Programmation C++</li>
+                    <li>Python Data Science</li>
+                    <li>Programmation C++</li>
                   </ul>
                 </div>
-                <div class="roadmap-card">
+                <div class="roadmap-card roadmap-infra">
+                  <div class="card-scan-line"></div>
+                  <div class="card-corner-tl"></div>
+                  <div class="card-corner-br"></div>
                   <div class="r-icon r-infra"><i class="fas fa-shield-alt"></i></div>
                   <h4>Cyber & Réseaux</h4>
                   <ul>
-                    <li>• Sécurité Cisco</li>
-                    <li>• Packet Tracer Pro</li>
+                    <li>Sécurité Cisco</li>
+                    <li>Packet Tracer Pro</li>
                   </ul>
                 </div>
               </div>
@@ -258,7 +258,30 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 .status-line { display: flex; align-items: center; justify-content: center; gap: 15px; opacity: 0.7; }
 .pulse { width: 10px; height: 10px; background: #0ea5e9; border-radius: 50%; box-shadow: 0 0 10px #0ea5e9; }
 
-/* ===== GALERIE FUTURISTE ===== */
+/* ===== COMPOSANTS FUTURISTES PARTAGÉS ===== */
+.card-scan-line {
+  position: absolute;
+  top: -5%; left: 0;
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, #0ea5e9, transparent);
+  opacity: 0.3;
+  animation: card-scan 3s linear infinite;
+}
+
+@keyframes card-scan {
+  from { top: -5%; }
+  to   { top: 105%; }
+}
+
+.card-corner-tl, .card-corner-br {
+  position: absolute;
+  width: 10px; height: 10px;
+  opacity: 0.5;
+}
+.card-corner-tl { top: 8px; left: 8px; border-top: 2px solid #0ea5e9; border-left: 2px solid #0ea5e9; }
+.card-corner-br { bottom: 16px; right: 8px; border-bottom: 2px solid #0ea5e9; border-right: 2px solid #0ea5e9; }
+
+/* ===== GALERIE ===== */
 .gallery-content { max-width: 1200px !important; }
 
 .gallery-title {
@@ -301,28 +324,6 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.card-scan-line {
-  position: absolute;
-  top: -5%; left: 0;
-  width: 100%; height: 1px;
-  background: linear-gradient(90deg, transparent, #0ea5e9, transparent);
-  opacity: 0.3;
-  animation: card-scan 3s linear infinite;
-}
-
-@keyframes card-scan {
-  from { top: -5%; }
-  to   { top: 105%; }
-}
-
-.card-corner-tl, .card-corner-br {
-  position: absolute;
-  width: 10px; height: 10px;
-  opacity: 0.5;
-}
-.card-corner-tl { top: 8px; left: 8px; border-top: 2px solid #0ea5e9; border-left: 2px solid #0ea5e9; }
-.card-corner-br { bottom: 16px; right: 8px; border-bottom: 2px solid #0ea5e9; border-right: 2px solid #0ea5e9; }
-
 .card-logo-box {
   background: white;
   border: 1.5px solid #0ea5e9;
@@ -342,7 +343,7 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
   line-height: 1.4;
 }
 
-/* ===== DÉTAILS (split layout) ===== */
+/* ===== DÉTAILS ===== */
 .split-layout { display: flex; align-items: center; padding: 0 8%; }
 .panel { position: relative; z-index: 5; flex: 1; }
 
@@ -408,7 +409,6 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 }
 .cta-link:hover { text-shadow: 0 0 8px #0ea5e9; }
 
-/* ===== CARTES DROITE ===== */
 .skills-stack { padding-left: 10%; display: flex; flex-direction: column; gap: 20px; }
 
 .card-style {
@@ -451,12 +451,12 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
 
 .card-style li::before { position: absolute; left: 12px; font-family: monospace; font-weight: bold; }
 .examples li::before { content: "01"; color: #38bdf8; font-size: 0.7rem; top: 8px; }
-.pros li::before { content: ">>"; color: #10b981; }
-.cons li::before { content: "!!"; color: #f43f5e; }
+.pros li::before     { content: ">>"; color: #10b981; }
+.cons li::before     { content: "!!"; color: #f43f5e; }
 
 .examples li { color: #f8fafc; border-left: 2px solid #0ea5e9; }
-.pros li { border-left: 2px solid #10b981; }
-.cons li { border-left: 2px solid #f43f5e; }
+.pros li     { border-left: 2px solid #10b981; }
+.cons li     { border-left: 2px solid #f43f5e; }
 
 /* ===== BILAN ===== */
 .bilan-container { max-width: 1000px !important; }
@@ -467,15 +467,62 @@ const handleImageError = (e) => { e.target.src = "https://cdn-icons-png.flaticon
   color: #0ea5e9; font-weight: 600; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 30px;
 }
 .bilan-quote { font-size: 2rem; font-weight: 200; font-style: italic; line-height: 1.4; margin-bottom: 60px; }
-.roadmap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-.roadmap-card {
-  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
-  padding: 30px; border-radius: 20px; text-align: left; transition: 0.3s;
+
+.roadmap-title {
+  display: flex; align-items: center; gap: 20px; margin-bottom: 30px;
 }
+.roadmap-title h3 {
+  font-size: 0.8rem; letter-spacing: 4px; color: rgba(255,255,255,0.5);
+  white-space: nowrap; font-weight: 600;
+}
+.roadmap-title .line { flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+
+.roadmap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+
+/* Carte roadmap futuriste */
+.roadmap-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(15,23,42,0.92), rgba(2,6,23,0.97));
+  border: 1px solid rgba(14,165,233,0.25);
+  backdrop-filter: blur(20px);
+  padding: 30px 25px;
+  overflow: hidden;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 88%, 93% 100%, 0% 100%);
+  text-align: left;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.roadmap-ia:hover   { border-color: rgba(168,85,247,0.7); box-shadow: 0 0 25px rgba(168,85,247,0.1), 0 20px 40px rgba(0,0,0,0.5); transform: translateY(-5px); }
+.roadmap-data:hover { border-color: rgba(14,165,233,0.7);  box-shadow: 0 0 25px rgba(14,165,233,0.1),  0 20px 40px rgba(0,0,0,0.5); transform: translateY(-5px); }
+.roadmap-infra:hover{ border-color: rgba(16,185,129,0.7);  box-shadow: 0 0 25px rgba(16,185,129,0.1),  0 20px 40px rgba(0,0,0,0.5); transform: translateY(-5px); }
+
+.roadmap-card h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0 0 15px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.roadmap-card ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+
+.roadmap-card li {
+  font-size: 0.88rem;
+  color: #94a3b8;
+  padding: 6px 12px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 4px;
+}
+
+.roadmap-ia   li { border-left: 2px solid #a855f7; }
+.roadmap-data li { border-left: 2px solid #0ea5e9; }
+.roadmap-infra li { border-left: 2px solid #10b981; }
+
 .r-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 20px; }
 .r-ia   { background: rgba(168,85,247,0.1); color: #a855f7; }
-.r-data { background: rgba(14,165,233,0.1); color: #0ea5e9; }
-.r-infra{ background: rgba(16,185,129,0.1); color: #10b981; }
+.r-data { background: rgba(14,165,233,0.1);  color: #0ea5e9; }
+.r-infra{ background: rgba(16,185,129,0.1);  color: #10b981; }
 
 /* ===== TRANSITIONS ===== */
 .page-flip-enter-active, .page-flip-leave-active { transition: all 0.6s cubic-bezier(0.4,0,0.2,1); }
