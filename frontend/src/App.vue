@@ -5,8 +5,13 @@ const current = ref(0)
 const certifications = ref([])
 const loading = ref(true)
 
-const next = () => { if (current.value < totalSlides.value - 1) current.value++ }
-const prev = () => { if (current.value > 0) current.value-- }
+const next = () => {
+  if (current.value < totalSlides.value - 1) current.value++
+}
+
+const prev = () => {
+  if (current.value > 0) current.value--
+}
 
 const handleKeydown = (e) => {
   if (e.key === 'ArrowRight') next()
@@ -15,152 +20,290 @@ const handleKeydown = (e) => {
 
 onMounted(async () => {
   window.addEventListener('keydown', handleKeydown)
+
   try {
     const response = await fetch('http://localhost:3000/api/certifications')
     certifications.value = await response.json()
   } catch (error) {
-    console.error("Erreur Backend :", error)
+    console.error('Erreur Backend :', error)
   } finally {
-    // Petit délai pour l'effet "BIOS"
-    setTimeout(() => { loading.value = false }, 1200)
+    setTimeout(() => {
+      loading.value = false
+    }, 1200)
   }
 })
 
-onUnmounted(() => { window.removeEventListener('keydown', handleKeydown) })
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
+})
 
-// Calcul dynamique du nombre de slides : Accueil (1) + Galerie (1) + Certifs (N) + Bilan (1)
 const totalSlides = computed(() => certifications.value.length + 3)
 
-// Détermine quelle certification afficher selon l'index actuel
 const activeCert = computed(() => {
-  const index = current.value - 2 // On retire l'accueil et la galerie
+  const index = current.value - 2
+
   if (index >= 0 && index < certifications.value.length) {
     return certifications.value[index]
   }
+
   return null
 })
 
 const handleImageError = (e) => {
-  e.target.src = "https://cdn-icons-png.flaticon.com/512/52/52349.png"
+  e.target.src =
+      'https://cdn-icons-png.flaticon.com/512/52/52349.png'
 }
 </script>
 
 <template>
   <div id="cyber-app">
-    <!-- CHARGEMENT SYSTÈME -->
+
+    <!-- LOADER -->
     <div v-if="loading" class="bios-loader">
-      <div class="terminal-text">
-        <p>> INITIALIZING_INTERFACE...</p>
-        <p>> LOADING_DATA_STREAM [OK]</p>
-        <div class="progress-bar"><div class="fill"></div></div>
+      <div class="loader-box">
+        <div class="loader-circle"></div>
+        <h2>Chargement de l’interface...</h2>
+        <p>Initialisation des données de certification</p>
       </div>
     </div>
 
     <template v-else>
-      <!-- INTERFACE HUD -->
-      <div class="hud-frame">
-        <div class="corner top-left"></div><div class="corner top-right"></div>
-        <div class="corner bottom-left"></div><div class="corner bottom-right"></div>
-        <div class="hud-header">OPERATOR: SIO_STUDENT // STATUS: ONLINE</div>
 
-        <nav class="hud-controls">
-          <button @click="prev" :disabled="current === 0">PREV_</button>
-          <div class="slide-counter">{{ current + 1 }} / {{ totalSlides }}</div>
-          <button @click="next" :disabled="current === totalSlides - 1">NEXT_</button>
-        </nav>
+      <!-- NAVIGATION -->
+      <div class="floating-nav">
+        <button @click="prev" :disabled="current === 0">
+          ←
+        </button>
+
+        <button
+            @click="next"
+            :disabled="current === totalSlides - 1"
+        >
+          →
+        </button>
       </div>
 
       <transition name="cyber-fade" mode="out-in">
 
-        <!-- SLIDE 0 : ACCUEIL -->
-        <div v-if="current === 0" class="slide center" key="home" style="display: flex !important; opacity: 1 !important;">
-          <!-- Fond avec z-index bas -->
-          <div class="bg-blur home-bg" style="z-index: 1;"></div>
+        <!-- HOME -->
+        <section
+            v-if="current === 0"
+            class="slide center"
+            key="home"
+        >
+          <div class="bg-blur home-bg"></div>
 
-          <!-- Contenu avec z-index haut et couleur forcée -->
-          <div class="hero-content" style="z-index: 10; position: relative;">
-            <h1 class="mega-title"
+          <div class="hero-content">
+
+            <div class="hero-topline">
+              BTS SERVICES INFORMATIQUES AUX ORGANISATIONS
+            </div>
+
+            <h1
+                class="mega-title"
                 data-text="CERTIFICATIONS"
-                style="color: #00f2ff !important; -webkit-text-stroke: 1px #00f2ff !important;">
+            >
               CERTIFICATIONS
             </h1>
-            <div class="hero-details">
-              <p class="subtitle" style="color: #00f2ff !important; opacity: 1 !important;">
-                BTS SERVICES INFORMATIQUES AUX ORGANISATIONS
-              </p>
-              <div class="id-badge" style="border: 1px solid #00f2ff !important; color: #00f2ff !important;">
-                PARCOURS SLAM // 2024 - 2026
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <!-- SLIDE 1 : INDEX / BENTO -->
-        <div v-else-if="current === 1" class="slide" key="gallery">
+            <p class="hero-description">
+              Parcours de montée en compétences autour du
+              développement, de la cybersécurité, des systèmes
+              et des technologies professionnelles modernes.
+            </p>
+
+            <div class="id-badge">
+              <span class="pulse"></span>
+              PARCOURS SLAM • 2024 — 2026
+            </div>
+
+          </div>
+        </section>
+
+        <!-- GALLERY -->
+        <section
+            v-else-if="current === 1"
+            class="slide"
+            key="gallery"
+        >
           <div class="bg-blur gallery-bg"></div>
+
           <div class="container-inner">
-            <h2 class="section-label">// DATABASE_INDEX</h2>
+
+            <div class="section-header">
+              <span class="section-mini">
+                CERTIFICATION INDEX
+              </span>
+
+              <h2>
+                Technologies & compétences validées
+              </h2>
+            </div>
+
             <div class="bento-grid">
-              <div v-for="(c, i) in certifications" :key="i" class="bento-item" @click="current = i + 2">
-                <div class="bento-logo-box"><img :src="c.logo" @error="handleImageError"></div>
+
+              <div
+                  v-for="(c, i) in certifications"
+                  :key="i"
+                  class="bento-item"
+                  @click="current = i + 2"
+              >
+
+                <div class="bento-logo-box">
+                  <img
+                      :src="c.logo"
+                      @error="handleImageError"
+                  >
+                </div>
+
                 <div class="item-info">
                   <h3>{{ c.title }}</h3>
-                  <span class="access-btn">ACCESS_DATA_</span>
+
+                  <p>
+                    Certification professionnelle validée
+                  </p>
+
+                  <div class="access-btn">
+                    Voir les détails
+                  </div>
                 </div>
+
               </div>
+
             </div>
           </div>
-        </div>
+        </section>
 
-        <!-- SLIDE DERNIÈRE : BILAN (Fixée sur totalSlides - 1) -->
-        <div v-else-if="current === totalSlides - 1" class="slide center" key="final">
+        <!-- FINAL -->
+        <section
+            v-else-if="current === totalSlides - 1"
+            class="slide center"
+            key="final"
+        >
           <div class="bg-blur final-bg"></div>
-          <div class="final-box content-up">
-            <div class="hex-badge">SIO</div>
-            <h2 class="mega-title-small">MISSION_COMPLETE</h2>
-            <!-- ICI LA NOUVELLE PHRASE -->
-            <p class="final-text">
-              Ce parcours de certification valide une expertise technique centrée sur le développement
-              d'applications sécurisées et la maîtrise des infrastructures, piliers fondamentaux
-              de ma spécialisation SLAM.
-            </p>
-            <button class="reboot-btn" @click="current = 0">_REBOOT_SYSTEM</button>
-          </div>
-        </div>
 
-        <!-- SLIDES INTERMÉDIAIRES : DÉTAILS CERTIFS -->
-        <div v-else-if="activeCert" class="slide split-view" :key="activeCert.title">
-          <div class="bg-blur dynamic-bg" :style="{ backgroundImage: `url(${activeCert.bg})` }"></div>
+          <div class="final-box">
+
+            <div class="final-icon">
+              ✓
+            </div>
+
+            <h2 class="mega-title-small">
+              PARCOURS VALIDÉ
+            </h2>
+
+            <p class="final-text">
+              Ce parcours de certification démontre une
+              capacité à maîtriser des technologies
+              professionnelles modernes, à développer des
+              applications robustes et à évoluer dans des
+              environnements techniques exigeants.
+            </p>
+
+            <button
+                class="reboot-btn"
+                @click="current = 0"
+            >
+              Revenir à l’accueil
+            </button>
+
+          </div>
+        </section>
+
+        <!-- DETAILS -->
+        <section
+            v-else-if="activeCert"
+            class="slide split-view"
+            :key="activeCert.title"
+        >
+          <div
+              class="bg-blur dynamic-bg"
+              :style="{
+              backgroundImage: `url(${activeCert.bg})`
+            }"
+          ></div>
 
           <div class="detail-container">
+
+            <!-- MAIN -->
             <div class="glass-module cert-main">
-              <div class="scan-line"></div>
+
               <div class="white-logo-card">
-                <img :src="activeCert.logo" class="logo-large" @error="handleImageError">
+                <img
+                    :src="activeCert.logo"
+                    class="logo-large"
+                    @error="handleImageError"
+                >
               </div>
+
               <div class="cert-text">
-                <h2 class="cert-title">{{ activeCert.title }}</h2>
-                <div class="cert-meta">DURATION: {{ activeCert.duration }} // STATUS: VALIDATED</div>
-                <p class="cert-desc">{{ activeCert.description }}</p>
+
+                <div class="cert-category">
+                  CERTIFICATION PROFESSIONNELLE
+                </div>
+
+                <h2 class="cert-title">
+                  {{ activeCert.title }}
+                </h2>
+
+                <div class="cert-meta">
+                  {{ activeCert.duration }}
+                </div>
+
+                <p class="cert-desc">
+                  {{ activeCert.description }}
+                </p>
+
               </div>
+
             </div>
 
+            <!-- STATS -->
             <div class="cert-stats">
+
               <div class="glass-module stat-block">
-                <h3 class="block-label">SKILLS_GAINED</h3>
+
+                <h3 class="block-label">
+                  Compétences acquises
+                </h3>
+
                 <ul class="skill-list">
-                  <li v-for="s in activeCert.pros" :key="s">{{ s }}</li>
+
+                  <li
+                      v-for="s in activeCert.pros"
+                      :key="s"
+                  >
+                    {{ s }}
+                  </li>
+
                 </ul>
+
               </div>
+
               <div class="glass-module stat-block">
-                <h3 class="block-label">TECH_STACK</h3>
+
+                <h3 class="block-label">
+                  Technologies utilisées
+                </h3>
+
                 <div class="tag-wrap">
-                  <span v-for="ex in activeCert.examples" :key="ex" class="badge-tech">{{ ex }}</span>
+
+                  <span
+                      v-for="ex in activeCert.examples"
+                      :key="ex"
+                      class="badge-tech"
+                  >
+                    {{ ex }}
+                  </span>
+
                 </div>
+
               </div>
+
             </div>
+
           </div>
-        </div>
+        </section>
 
       </transition>
     </template>
@@ -168,132 +311,732 @@ const handleImageError = (e) => {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 #cyber-app {
-  background: #000; color: #00f2ff;
-  font-family: 'JetBrains Mono', monospace;
-  height: 100vh; width: 100vw; overflow: hidden;
-  --neon: #00f2ff;
+  --primary: #6ee7ff;
+  --secondary: #8b5cf6;
+  --bg: #050816;
+  --glass: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.1);
+  --text: #f8fafc;
+  --muted: rgba(255,255,255,0.65);
+
+  background:
+      radial-gradient(circle at top left,
+      rgba(139,92,246,0.16),
+      transparent 30%),
+
+      radial-gradient(circle at bottom right,
+      rgba(110,231,255,0.12),
+      transparent 30%),
+
+      #050816;
+
+  color: var(--text);
+
+  font-family: 'Inter', sans-serif;
+
+  height: 100vh;
+  width: 100vw;
+
+  overflow: hidden;
+}
+
+/* GLOBAL */
+
+* {
+  box-sizing: border-box;
+}
+
+.slide {
+  position: relative;
+
+  width: 100vw;
+  height: 100vh;
+
+  padding: 60px;
+
+  overflow: hidden;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 /* BACKGROUNDS */
+
 .bg-blur {
   position: absolute;
   inset: 0;
+
   background-size: cover;
   background-position: center;
-  filter: brightness(0.2) blur(40px); /* <--- C'EST ICI */
-  z-index: 1;
+
+  opacity: 0.15;
+
+  filter:
+      blur(12px)
+      brightness(0.45);
+
   transform: scale(1.1);
-  transition: 0.8s ease;
 }
-.home-bg { background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa'); }
-.gallery-bg { background-image: url('https://images.unsplash.com/photo-1510511459019-5dee99c43dbf'); }
-.final-bg { background-image: url('https://images.unsplash.com/photo-1461749280684-dccba630e2f6'); }
 
-/* HUD SYSTEM */
-.hud-frame { position: fixed; inset: 20px; border: 1px solid rgba(0, 242, 255, 0.1); pointer-events: none; z-index: 100; }
-.corner { position: absolute; width: 15px; height: 15px; border: 2px solid var(--neon); }
-.top-left { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
-.top-right { top: -2px; right: -2px; border-left: 0; border-bottom: 0; }
-.bottom-left { bottom: -2px; left: -2px; border-right: 0; border-top: 0; }
-.bottom-right { bottom: -2px; right: -2px; border-left: 0; border-top: 0; }
-
-.hud-header { position: absolute; top: 12px; left: 20px; font-size: 0.65rem; letter-spacing: 2px; opacity: 0.8; }
-.hud-controls {
-  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-  display: flex; align-items: center; gap: 20px; pointer-events: auto;
+.home-bg {
+  background-image:
+      url('https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=2070');
 }
-.hud-controls button {
-  background: rgba(0,0,0,0.8); border: 1px solid var(--neon); color: var(--neon);
-  padding: 8px 20px; cursor: pointer; font-family: inherit; font-size: 0.7rem; transition: 0.3s;
+
+.gallery-bg {
+  background-image:
+      url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072');
 }
-.hud-controls button:hover:not(:disabled) { background: var(--neon); color: #000; box-shadow: 0 0 15px var(--neon); }
-.hud-controls button:disabled { opacity: 0.3; cursor: not-allowed; }
 
-/* SLIDE CORE */
-.slide { height: 100vh; width: 100vw; padding: 40px; box-sizing: border-box; position: relative; z-index: 5; }
-.center { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.final-bg {
+  background-image:
+      url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070');
+}
 
-/* HOME TITLES */
-.hero-content { margin-top: -50px; }
-.mega-title {
+/* HERO */
+
+.hero-content {
+  position: relative;
   z-index: 10;
-  text-shadow: 0 0 20px rgba(0, 242, 255, 0.5); /* Effet néon pour percer le noir */
-}
-.mega-title::after {
-  content: attr(data-text); position: absolute; left: 0; top: 0;
-  color: var(--neon); animation: glitch 4s infinite;
-}
-.subtitle { font-size: 0.9rem; letter-spacing: 5px; margin-top: 20px; opacity: 0.7; }
-.id-badge { display: inline-block; margin-top: 20px; padding: 6px 20px; border: 1px solid var(--neon); font-size: 0.8rem; }
 
-/* BENTO INDEX */
-.container-inner { max-width: 1200px; margin: 40px auto; position: relative; z-index: 10; }
-.section-label { font-size: 0.8rem; margin-bottom: 30px; letter-spacing: 3px; color: var(--neon); }
-.bento-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  max-width: 1000px;
+}
+
+.hero-topline {
+  color: var(--primary);
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  letter-spacing: 5px;
+
+  margin-bottom: 30px;
+
+  text-transform: uppercase;
+}
+
+.mega-title {
+  font-size: clamp(4rem, 10vw, 8rem);
+
+  font-weight: 900;
+
+  line-height: 0.95;
+
+  letter-spacing: -6px;
+
+  margin: 0;
+
+  background: linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #b8d8ff 45%,
+      #6ee7ff 100%
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow:
+      0 0 40px rgba(110,231,255,0.12);
+}
+
+.hero-description {
+  margin: 35px auto 0;
+
+  max-width: 760px;
+
+  color: var(--muted);
+
+  line-height: 1.8;
+
+  font-size: 1.05rem;
+}
+
+.id-badge {
+  margin-top: 45px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 16px 30px;
+
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.06);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(14px);
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  box-shadow:
+      0 10px 50px rgba(0,0,0,0.3);
+}
+
+.pulse {
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+
+  background: #6ee7ff;
+
+  box-shadow:
+      0 0 10px #6ee7ff;
+}
+
+/* NAV */
+
+.floating-nav {
+  position: fixed;
+
+  right: 40px;
+  bottom: 40px;
+
+  display: flex;
+  gap: 14px;
+
+  z-index: 100;
+}
+
+.floating-nav button {
+  width: 60px;
+  height: 60px;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  background: rgba(255,255,255,0.06);
+
+  backdrop-filter: blur(16px);
+
+  color: white;
+
+  font-size: 1.2rem;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+}
+
+.floating-nav button:hover:not(:disabled) {
+  transform: scale(1.08);
+
+  background: rgba(255,255,255,0.12);
+}
+
+.floating-nav button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* SECTION */
+
+.container-inner {
+  position: relative;
+  z-index: 10;
+
+  max-width: 1350px;
+
+  margin: auto;
+}
+
+.section-header {
+  margin-bottom: 50px;
+}
+
+.section-mini {
+  color: var(--primary);
+
+  font-size: 0.8rem;
+
+  letter-spacing: 4px;
+
+  text-transform: uppercase;
+}
+
+.section-header h2 {
+  margin-top: 15px;
+
+  font-size: 3rem;
+
+  font-weight: 800;
+}
+
+/* BENTO */
+
+.bento-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fill, minmax(320px, 1fr));
+
+  gap: 24px;
+}
+
 .bento-item {
-  background: rgba(0, 242, 255, 0.03); border: 1px solid rgba(0, 242, 255, 0.1);
-  padding: 30px; cursor: pointer; transition: 0.4s ease;
-}
-.bento-item:hover { border-color: var(--neon); transform: translateY(-5px); background: rgba(0, 242, 255, 0.08); }
-.bento-logo-box { background: #fff; height: 70px; padding: 12px; display: flex; justify-content: center; margin-bottom: 20px; border-radius: 2px; }
-.bento-logo-box img { max-height: 100%; object-fit: contain; }
+  background: rgba(255,255,255,0.04);
 
-/* DETAIL VIEW */
-.split-view { display: flex; align-items: center; justify-content: center; }
-.detail-container { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; width: 100%; max-width: 1100px; z-index: 10; }
-.glass-module { background: rgba(0, 10, 15, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(0, 242, 255, 0.2); padding: 35px; }
-.white-logo-card { background: #fff; padding: 25px; border-radius: 4px; height: 160px; display: flex; justify-content: center; margin-bottom: 30px; }
-.logo-large { max-height: 100%; object-fit: contain; }
-.cert-title { font-family: 'Syncopate', sans-serif; font-size: 1.6rem; color: var(--neon); margin: 0; }
-.cert-meta { font-size: 0.7rem; margin: 15px 0; opacity: 0.6; letter-spacing: 1px; }
-.cert-desc { font-size: 0.9rem; line-height: 1.7; color: #ccc; }
+  border: 1px solid rgba(255,255,255,0.08);
+
+  border-radius: 28px;
+
+  padding: 30px;
+
+  cursor: pointer;
+
+  transition:
+      transform 0.4s ease,
+      border 0.4s ease,
+      background 0.4s ease;
+}
+
+.bento-item:hover {
+  transform: translateY(-8px);
+
+  border-color: rgba(110,231,255,0.4);
+
+  background: rgba(255,255,255,0.07);
+
+  box-shadow:
+      0 20px 60px rgba(0,0,0,0.35);
+}
+
+.bento-logo-box {
+  height: 90px;
+
+  background: white;
+
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+
+  margin-bottom: 24px;
+}
+
+.bento-logo-box img {
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.item-info h3 {
+  margin: 0;
+
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.item-info p {
+  margin-top: 10px;
+
+  color: var(--muted);
+
+  line-height: 1.6;
+
+  font-size: 0.95rem;
+}
+
+.access-btn {
+  margin-top: 22px;
+
+  display: inline-flex;
+
+  padding: 10px 18px;
+
+  border-radius: 999px;
+
+  background: rgba(110,231,255,0.08);
+
+  border: 1px solid rgba(110,231,255,0.15);
+
+  color: var(--primary);
+
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* DETAILS */
+
+.split-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-container {
+  position: relative;
+  z-index: 10;
+
+  width: 100%;
+  max-width: 1300px;
+
+  display: grid;
+
+  grid-template-columns: 1.2fr 0.8fr;
+
+  gap: 28px;
+}
+
+.glass-module {
+  background: rgba(255,255,255,0.05);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(18px);
+
+  border-radius: 32px;
+
+  padding: 40px;
+
+  box-shadow:
+      0 10px 50px rgba(0,0,0,0.35);
+}
+
+.white-logo-card {
+  height: 180px;
+
+  background: white;
+
+  border-radius: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 25px;
+
+  margin-bottom: 35px;
+}
+
+.logo-large {
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.cert-category {
+  color: var(--primary);
+
+  font-size: 0.8rem;
+
+  letter-spacing: 3px;
+
+  margin-bottom: 16px;
+}
+
+.cert-title {
+  margin: 0;
+
+  font-size: 2.2rem;
+
+  font-weight: 800;
+
+  line-height: 1.2;
+}
+
+.cert-meta {
+  margin-top: 18px;
+
+  color: var(--muted);
+
+  font-size: 0.95rem;
+}
+
+.cert-desc {
+  margin-top: 25px;
+
+  line-height: 1.9;
+
+  color: rgba(255,255,255,0.8);
+
+  font-size: 1rem;
+}
 
 /* STATS */
-.cert-stats { display: flex; flex-direction: column; gap: 20px; }
-.block-label { font-size: 0.65rem; color: var(--neon); border-bottom: 1px solid rgba(0, 242, 255, 0.2); padding-bottom: 10px; margin-bottom: 20px; letter-spacing: 2px; }
-.skill-list { list-style: none; padding: 0; font-size: 0.8rem; }
-.skill-list li { margin-bottom: 12px; padding-left: 20px; position: relative; }
-.skill-list li::before { content: ">"; position: absolute; left: 0; color: var(--neon); font-weight: bold; }
-.tag-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
-.badge-tech { border: 1px solid rgba(0, 242, 255, 0.4); padding: 5px 12px; font-size: 0.7rem; color: #fff; background: rgba(0, 242, 255, 0.05); }
 
-/* FINAL SLIDE */
-.final-box { z-index: 10; max-width: 600px; }
-.hex-badge {
-  font-size: 1.8rem; font-weight: bold; border: 2px solid var(--neon);
-  width: 90px; height: 90px; display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 30px; clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+.cert-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
-.mega-title-small { font-family: 'Syncopate', sans-serif; font-size: 2.5rem; color: var(--neon); margin-bottom: 20px; }
+
+.block-label {
+  margin-top: 0;
+  margin-bottom: 25px;
+
+  font-size: 1rem;
+
+  font-weight: 700;
+}
+
+.skill-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.skill-list li {
+  position: relative;
+
+  padding-left: 24px;
+
+  margin-bottom: 16px;
+
+  line-height: 1.7;
+
+  color: rgba(255,255,255,0.8);
+}
+
+.skill-list li::before {
+  content: '';
+
+  position: absolute;
+
+  left: 0;
+  top: 10px;
+
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+
+  background: var(--primary);
+}
+
+.tag-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.badge-tech {
+  padding: 10px 16px;
+
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.06);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  font-size: 0.85rem;
+
+  color: white;
+}
+
+/* FINAL */
+
+.final-box {
+  position: relative;
+  z-index: 10;
+
+  max-width: 850px;
+}
+
+.final-icon {
+  width: 120px;
+  height: 120px;
+
+  margin: auto auto 35px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 3rem;
+  font-weight: 700;
+
+  background:
+      linear-gradient(
+          135deg,
+          rgba(110,231,255,0.18),
+          rgba(139,92,246,0.18)
+      );
+
+  border: 1px solid rgba(255,255,255,0.1);
+
+  backdrop-filter: blur(12px);
+}
+
+.mega-title-small {
+  font-size: clamp(3rem, 7vw, 5rem);
+
+  font-weight: 900;
+
+  margin: 0;
+
+  background: linear-gradient(
+      135deg,
+      white,
+      #8b5cf6,
+      #6ee7ff
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.final-text {
+  margin-top: 30px;
+
+  color: var(--muted);
+
+  line-height: 1.9;
+
+  font-size: 1.1rem;
+}
+
 .reboot-btn {
-  margin-top: 40px; background: transparent; border: 1px solid var(--neon);
-  color: var(--neon); padding: 12px 30px; cursor: pointer; font-family: inherit;
-  letter-spacing: 2px; transition: 0.3s;
-}
-.reboot-btn:hover { background: var(--neon); color: #000; box-shadow: 0 0 20px var(--neon); }
+  margin-top: 45px;
 
-/* ANIMATIONS */
-.scan-line {
-  position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-  background: var(--neon); box-shadow: 0 0 15px var(--neon); animation: scan 4s linear infinite; opacity: 0.5;
-}
-@keyframes scan { 0% { top: 0% } 100% { top: 100% } }
-@keyframes glitch {
-  0%, 100% { transform: translate(0) }
-  2% { transform: translate(-2px, 1px) }
-  4% { transform: translate(2px, -1px) }
+  border: none;
+
+  padding: 16px 32px;
+
+  border-radius: 999px;
+
+  background:
+      linear-gradient(
+          135deg,
+          #6ee7ff,
+          #8b5cf6
+      );
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
 }
 
-.cyber-fade-enter-active, .cyber-fade-leave-active { transition: 0.5s ease; }
-.cyber-fade-enter-from, .cyber-fade-leave-to { opacity: 0; filter: blur(15px); transform: translateY(10px); }
+.reboot-btn:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+      0 15px 40px rgba(110,231,255,0.2);
+}
+
+/* TRANSITIONS */
+
+.cyber-fade-enter-active,
+.cyber-fade-leave-active {
+  transition:
+      opacity 0.7s ease,
+      transform 0.7s ease,
+      filter 0.7s ease;
+}
+
+.cyber-fade-enter-from,
+.cyber-fade-leave-to {
+  opacity: 0;
+
+  transform: scale(1.03);
+
+  filter: blur(10px);
+}
 
 /* LOADER */
-.bios-loader { height: 100vh; display: flex; align-items: center; justify-content: center; background: #000; z-index: 1000; }
-.terminal-text p { margin: 5px 0; font-size: 0.8rem; }
-.progress-bar { height: 2px; background: rgba(0, 242, 255, 0.1); width: 250px; margin-top: 15px; }
-.fill { height: 100%; background: var(--neon); width: 0; animation: fill 1.2s forwards ease-in-out; }
-@keyframes fill { to { width: 100%; } }
+
+.bios-loader {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #050816;
+}
+
+.loader-box {
+  text-align: center;
+}
+
+.loader-circle {
+  width: 80px;
+  height: 80px;
+
+  margin: auto auto 25px;
+
+  border-radius: 50%;
+
+  border:
+      4px solid rgba(255,255,255,0.08);
+
+  border-top:
+      4px solid #6ee7ff;
+
+  animation: spin 1s linear infinite;
+}
+
+.loader-box h2 {
+  margin-bottom: 10px;
+
+  font-size: 1.4rem;
+}
+
+.loader-box p {
+  color: var(--muted);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+
+  .detail-container {
+    grid-template-columns: 1fr;
+  }
+
+  .slide {
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .slide {
+    padding: 30px;
+  }
+
+  .section-header h2 {
+    font-size: 2rem;
+  }
+
+  .floating-nav {
+    right: 20px;
+    bottom: 20px;
+  }
+
+  .floating-nav button {
+    width: 52px;
+    height: 52px;
+  }
+
+  .hero-description {
+    font-size: 0.95rem;
+  }
+}
 </style>
