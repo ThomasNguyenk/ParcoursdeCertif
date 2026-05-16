@@ -52,7 +52,7 @@ const certifications = [
         bg: "https://img.freepik.com/free-photo/cybersecurity-shield-with-padlock_23-2151998478.jpg",
         link: "https://drive.google.com/file/d/15cCNrYsFQhADhy0a6LxHx7r9ZJwQbkbi/view",
         description: "Apprentissage des bases de la protection des données et des réseaux.",
-        pros: ["Maîtrise triade CIA", "Identification menaces", "Socle solide"],
+        pros: ["Maîtrise triade CIA (Confidentialité, Intégrité et Disponibilité )", "Identification menaces", "Socle solide"],
         cons: ["Pas de labs pratiques", "Théorique"],
         examples: ["Cryptographie & Hachage", "Protocoles réseau", "Authentification MFA"]
     },
